@@ -1,4 +1,7 @@
+import 'package:crafty_bay/data/network_caller/network_caller.dart';
+import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:crafty_bay/presentation/screens/complete_profile_screen.dart';
+import 'package:crafty_bay/presentation/state_holders/otp_resend_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/verify_otp_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/widgets/app_logo.dart';
@@ -19,6 +22,14 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final TextEditingController _otpTEController = TextEditingController();
+  final OtpResendController _otpResendController =
+      Get.find<OtpResendController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _otpResendController.startTheTimer(initialTime: 100);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +47,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 const SizedBox(height: 16),
                 Text('Enter OTP Code', style: textTheme.headlineLarge),
                 const SizedBox(height: 4),
-                Text('A 4 digit OTP code has been sent',
+                Text('A 6 digit OTP code has been sent',
                     style: textTheme.headlineSmall),
                 const SizedBox(height: 24),
                 _buildPinField(),
@@ -53,7 +64,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       if (result) {
                         // TODO: Pending in next 30th May, 2024
                         // 1. If success, then call another api named "readProfile"
-                         //   a. Create Read profile controller
+                        //   a. Create Read profile controller
                         // 2. check if data is "null" or not, if null then move to the
                         //    Complete profile screen, then move to home page
                         //    a. Create complete profile controller
@@ -71,10 +82,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 }),
                 const SizedBox(height: 24),
                 _buildResendCodeMessage(),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('Resend Code'),
-                )
               ],
             ),
           ),
@@ -84,20 +91,40 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   }
 
   Widget _buildResendCodeMessage() {
-    return RichText(
-      text: const TextSpan(
-        style: TextStyle(
-          color: Colors.grey,
-          fontWeight: FontWeight.w500,
-        ),
+    return GetBuilder<OtpResendController>(builder: (otpResendController) {
+      return Column(
         children: [
-          TextSpan(text: 'This code will expire in '),
-          // TODO: complete this count down
-          TextSpan(
-              text: '100s', style: TextStyle(color: AppColors.primaryColor)),
+          RichText(
+            text: TextSpan(
+              style: const TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+              children: [
+                const TextSpan(
+                  text: 'This code will expire in ',
+                ),
+                TextSpan(
+                  text: '${otpResendController.getCurrentTimerTime}s',
+                  style: const TextStyle(color: AppColors.primaryColor),
+                ),
+              ],
+            ),
+          ),
+          TextButton(
+            onPressed: (otpResendController.getCurrentTimerTime > 0)
+                ? null
+                : () async {
+                    otpResendController.startTheTimer(initialTime: 100);
+                    NetworkCaller.getRequest(
+                      url: Urls.verifyEmail(widget.email),
+                    );
+                  },
+            child: const Text('Resend Code'),
+          )
         ],
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildPinField() {

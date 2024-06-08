@@ -21,37 +21,28 @@ class _CraftyBayState extends State<CraftyBay> {
       home: const SplashScreen(),
       initialBinding: ControllerBinder(),
       theme: ThemeData(
-        colorSchemeSeed: AppColors.primaryColor,
-        progressIndicatorTheme: const ProgressIndicatorThemeData(
-          color: AppColors.primaryColor,
-        ),
-        textTheme: _textTheme(),
-        inputDecorationTheme: _inputDecorationTheme(),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: AppColors.primaryColor
-          )
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              fixedSize: const Size.fromWidth(double.maxFinite),
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              backgroundColor: AppColors.primaryColor,
-              foregroundColor: Colors.white,
-              textStyle: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16
-              )
-          )
-        )
-      ),
+          colorSchemeSeed: AppColors.primaryColor,
+          progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: AppColors.primaryColor,
+          ),
+          textTheme: _textTheme(),
+          inputDecorationTheme: _inputDecorationTheme(),
+          appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.white, foregroundColor: Colors.black),
+          textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                  foregroundColor: AppColors.primaryColor)),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                  fixedSize: const Size.fromWidth(double.maxFinite),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  backgroundColor: AppColors.primaryColor,
+                  foregroundColor: Colors.white,
+                  textStyle: const TextStyle(
+                      fontWeight: FontWeight.w400, fontSize: 16)))),
     );
   }
 
