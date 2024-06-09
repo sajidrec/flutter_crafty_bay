@@ -1,4 +1,3 @@
-
 import 'package:crafty_bay/data/models/create_profile_model.dart';
 import 'package:crafty_bay/data/network_caller/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
@@ -49,8 +48,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     final customerDetails = CreateProfileModel(
-                      cusName: _firstNameTEController.text +
-                          _lastNameTEController.text,
+                      cusName:
+                          "${_firstNameTEController.text} ${_lastNameTEController.text}",
                       cusPhone: _mobileTEController.text,
                       cusCity: _cityTEController.text,
                       shipAdd: _shippingAddressTEController.text,
