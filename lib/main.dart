@@ -14,7 +14,7 @@ void main() {
 /* TODO:
 assignment assigned in class time
 1. (done) countdown timer in otp verification screen
-2. read profile screen to complete profile screen(or home screen) navigation process:
+2. (complete profile screen pending) read profile screen to complete profile screen(or home screen) navigation process:
    a. If success, then call another api named "readProfile". Create Read profile controller
    b. check if data is "null" or not,
    if null then move to the Complete profile screen, then move to home page. Create complete profile controller

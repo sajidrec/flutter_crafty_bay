@@ -1,6 +1,8 @@
 import 'package:crafty_bay/data/network_caller/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:crafty_bay/presentation/screens/complete_profile_screen.dart';
+import 'package:crafty_bay/presentation/screens/main_bottom_nav_bar_screen.dart';
+import 'package:crafty_bay/presentation/state_holders/complete_profile_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/otp_resend_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/verify_otp_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
@@ -57,28 +59,30 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     return const CenteredCircularProgressIndicator();
                   }
 
-                  return ElevatedButton(
-                    onPressed: () async {
-                      final result = await verifyOtpController.verifyOtp(
-                          widget.email, _otpTEController.text);
-                      if (result) {
-                        // TODO: Pending in next 30th May, 2024
-                        // 1. If success, then call another api named "readProfile"
-                        //   a. Create Read profile controller
-                        // 2. check if data is "null" or not, if null then move to the
-                        //    Complete profile screen, then move to home page
-                        //    a. Create complete profile controller
-                        // 3. Otherwise back to the home page
-                        Get.to(() => const CompleteProfileScreen());
-                      } else {
-                        if (mounted) {
-                          showSnackMessage(
-                              context, verifyOtpController.errorMessage);
+                  return GetBuilder<CompleteProfileController>(
+                      builder: (completeProfileController) {
+                    return ElevatedButton(
+                      onPressed: () async {
+                        final result = await verifyOtpController.verifyOtp(
+                            widget.email, _otpTEController.text);
+                        if (result) {
+
+                          if (await completeProfileController
+                              .isProfileCompleted()) {
+                            Get.to(() => const MainBottomNavBarScreen());
+                          } else {
+                            Get.to(() => const CompleteProfileScreen());
+                          }
+                        } else {
+                          if (mounted) {
+                            showSnackMessage(
+                                context, verifyOtpController.errorMessage);
+                          }
                         }
-                      }
-                    },
-                    child: const Text('Next'),
-                  );
+                      },
+                      child: const Text('Next'),
+                    );
+                  });
                 }),
                 const SizedBox(height: 24),
                 _buildResendCodeMessage(),

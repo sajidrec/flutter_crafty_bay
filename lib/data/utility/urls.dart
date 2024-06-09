@@ -24,4 +24,6 @@ class Urls {
       '$_baseUrl/CreateWishList/$productId';
 
   static const String getWishList = '$_baseUrl/ProductWishList';
+
+  static const String readProfileUrl = '$_baseUrl/ReadProfile';
 }
