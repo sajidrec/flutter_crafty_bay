@@ -55,12 +55,14 @@ class NetworkCaller {
       log(url);
       log(UserAuthController.accessToken);
       log(body.toString());
-      final Response response = await post(Uri.parse(url),
-          headers: {
-            'accept': 'application/json',
-            'token': UserAuthController.accessToken
-          },
-          body: body);
+      final Response response = await post(
+        Uri.parse(url),
+        headers: {
+          'accept': 'application/json',
+          'token': UserAuthController.accessToken
+        },
+        body: body,
+      );
       log(response.statusCode.toString());
       log(response.body.toString());
       if (response.statusCode == 200) {

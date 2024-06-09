@@ -1,5 +1,11 @@
+
+import 'package:crafty_bay/data/models/create_profile_model.dart';
+import 'package:crafty_bay/data/network_caller/network_caller.dart';
+import 'package:crafty_bay/data/utility/urls.dart';
+import 'package:crafty_bay/presentation/screens/main_bottom_nav_bar_screen.dart';
 import 'package:crafty_bay/presentation/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
   const CompleteProfileScreen({
@@ -41,7 +47,24 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 _buildCompleteProfileForm(),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final customerDetails = CreateProfileModel(
+                      cusName: _firstNameTEController.text +
+                          _lastNameTEController.text,
+                      cusPhone: _mobileTEController.text,
+                      cusCity: _cityTEController.text,
+                      shipAdd: _shippingAddressTEController.text,
+                    );
+
+                    try {
+                      await NetworkCaller.postRequest(
+                        url: Urls.createProfileUrl,
+                        body: customerDetails.toJson(),
+                      );
+                    } catch (e) {}
+
+                    Get.offAll(const MainBottomNavBarScreen());
+                  },
                   child: const Text('Complete'),
                 ),
               ],
@@ -89,11 +112,11 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 
   @override
   void dispose() {
+    super.dispose();
     _firstNameTEController.dispose();
     _lastNameTEController.dispose();
     _mobileTEController.dispose();
     _cityTEController.dispose();
     _shippingAddressTEController.dispose();
-    super.dispose();
   }
 }

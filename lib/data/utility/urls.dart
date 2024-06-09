@@ -26,4 +26,6 @@ class Urls {
   static const String getWishList = '$_baseUrl/ProductWishList';
 
   static const String readProfileUrl = '$_baseUrl/ReadProfile';
+
+  static const String createProfileUrl = '$_baseUrl/CreateProfile';
 }
