@@ -66,12 +66,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         final result = await verifyOtpController.verifyOtp(
                             widget.email, _otpTEController.text);
                         if (result) {
-
                           if (await completeProfileController
                               .isProfileCompleted()) {
-                            Get.to(() => const MainBottomNavBarScreen());
+                            Get.offAll(() => const MainBottomNavBarScreen());
                           } else {
-                            Get.to(() => const CompleteProfileScreen());
+                            Get.offAll(() => const CompleteProfileScreen());
                           }
                         } else {
                           if (mounted) {
