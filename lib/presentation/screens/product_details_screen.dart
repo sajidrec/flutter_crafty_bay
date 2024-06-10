@@ -1,5 +1,6 @@
 import 'package:crafty_bay/data/models/cart_model.dart';
 import 'package:crafty_bay/data/models/product_details_model.dart';
+import 'package:crafty_bay/presentation/screens/reviews_screen.dart';
 import 'package:crafty_bay/presentation/state_holders/add_to_cart_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/add_to_wish_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_details_controller.dart';
@@ -14,7 +15,10 @@ import 'package:get/get.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key, required this.productId});
+  const ProductDetailsScreen({
+    super.key,
+    required this.productId,
+  });
 
   final int productId;
 
@@ -90,7 +94,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               _buildCounter()
                             ],
                           ),
-                          _buildReviewSection(productDetails),
+                          _buildReviewSection(
+                            productDetails,
+                            productId: widget.productId,
+                          ),
                           const Text(
                             'Color',
                             style: TextStyle(
@@ -213,7 +220,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildReviewSection(ProductDetailsModel productDetails) {
+  Widget _buildReviewSection(
+    ProductDetailsModel productDetails, {
+    required int productId,
+  }) {
     return Wrap(
       spacing: 5,
       alignment: WrapAlignment.start,
@@ -229,7 +239,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             Text('${productDetails.product?.star ?? 0}')
           ],
         ),
-        TextButton(onPressed: () {}, child: const Text('Reviews')),
+        TextButton(
+          onPressed: () {
+            Get.to(
+              ReviewsScreen(
+                productId: productId,
+              ),
+            );
+          },
+          child: const Text('Reviews'),
+        ),
         GetBuilder<AddToWishListController>(
           builder: (addToWishListController) {
             if (addToWishListController.inProgress) {
