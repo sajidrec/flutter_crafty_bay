@@ -1,8 +1,15 @@
+import 'package:crafty_bay/presentation/state_holders/create_review_screen_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CreateReviewScreen extends StatefulWidget {
-  const CreateReviewScreen({super.key});
+  final int productId;
+
+  const CreateReviewScreen({
+    super.key,
+    required this.productId,
+  });
 
   @override
   State<CreateReviewScreen> createState() => _CreateReviewScreenState();
@@ -60,15 +67,27 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
             const SizedBox(height: 16),
             SizedBox(
               width: double.maxFinite,
-              child: FilledButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(
-                    AppColors.primaryColor,
-                  ),
-                ),
-                child: const Text("Submit"),
-              ),
+              child: GetBuilder<CreateReviewScreenController>(
+                  builder: (createReviewScreenController) {
+                return (createReviewScreenController.inProgress)
+                    ? const Center(child: CircularProgressIndicator())
+                    : FilledButton(
+                        onPressed: () async {
+                          await createReviewScreenController.submitReview(
+                            reviewDescription:
+                                _reviewTEController.text.trim().toString(),
+                            productId: widget.productId,
+                          );
+                          Get.snackbar("", "Submitted");
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all(
+                            AppColors.primaryColor,
+                          ),
+                        ),
+                        child: const Text("Submit"),
+                      );
+              }),
             )
           ],
         ),

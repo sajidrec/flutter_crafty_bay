@@ -1,13 +1,40 @@
+import 'package:crafty_bay/data/models/review_model.dart';
 import 'package:crafty_bay/presentation/screens/create_review_screen.dart';
+import 'package:crafty_bay/presentation/state_holders/reviews_screen_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ReviewsScreen extends StatelessWidget {
+class ReviewsScreen extends StatefulWidget {
   const ReviewsScreen({
     super.key,
-    required int productId,
+    required this.productId,
   });
+
+  final int productId;
+
+  @override
+  State<ReviewsScreen> createState() => _ReviewsScreenState();
+}
+
+class _ReviewsScreenState extends State<ReviewsScreen> {
+  final _reviewScreenController = Get.find<ReviewsScreenController>();
+
+  List<ReviewModel> _reviewList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    requestReviewList(productId: widget.productId);
+  }
+
+  Future<void> requestReviewList({
+    required int productId,
+  }) async {
+    _reviewList = await _reviewScreenController.requestReviewList(
+      productId: productId,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +80,20 @@ class ReviewsScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Reviews (1000)",
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            GetBuilder<ReviewsScreenController>(builder: (_) {
+              return Text(
+                "Reviews (${_reviewList.length})",
+                style: Theme.of(context).textTheme.headlineMedium,
+              );
+            }),
             IconButton(
               color: AppColors.primaryColor,
               onPressed: () {
-                Get.to(const CreateReviewScreen());
+                Get.to(
+                  () => CreateReviewScreen(
+                    productId: widget.productId,
+                  ),
+                );
               },
               icon: const Icon(
                 Icons.add_circle,
@@ -74,64 +107,76 @@ class ReviewsScreen extends StatelessWidget {
   }
 
   Widget _buildReviewList() {
-    return ListView.separated(
-      shrinkWrap: true,
-      itemBuilder: (context, index) => Column(
-        children: [
-          Card(
-            elevation: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              width: double.maxFinite,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.person,
-                          size: 30,
+    return GetBuilder<ReviewsScreenController>(builder: (_) {
+      return _reviewScreenController.inProgress
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.separated(
+              shrinkWrap: true,
+              itemCount: _reviewList.length,
+              itemBuilder: (context, index) => Column(
+                children: [
+                  Card(
+                    elevation: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      width: double.maxFinite,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.person,
+                                  size: 30,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  _reviewList[index].profile?.cusName ??
+                                      "Unkown",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              _reviewList[index].description ?? "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Colors.grey.shade600,
+                                  ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 5),
-                        Text(
-                          "Sajid Hossain",
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                      ),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "dummy text any thign kca, bealk asdklflskadjfklsdajflksjadfkljsdalkfj asdlkfjkalsdfjlksadjfkl jlkasdjfkl jasdklfj lkasjdflk jaskldfj lkd ",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Colors.grey.shade600,
-                          ),
-                    ),
-                  ],
-                ),
+                  ),
+                  (index == _reviewList.length - 1)
+                      ? const SizedBox(
+                          height: 100,
+                        )
+                      : const SizedBox.shrink(),
+                ],
               ),
-            ),
-          ),
-          // TODO: When implementing api must change this hard coded logic
-          (index == 9)
-              ? const SizedBox(
-                  height: 100,
-                )
-              : const SizedBox.shrink(),
-        ],
-      ),
-      itemCount: 10,
-      separatorBuilder: (BuildContext context, int index) {
-        return const SizedBox(
-          height: 10,
-        );
-      },
-    );
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(
+                  height: 10,
+                );
+              },
+            );
+    });
   }
 }
