@@ -26,10 +26,15 @@ class Urls {
   static String getReviewList(int productId) =>
       '$_baseUrl/ListReviewByProduct/$productId';
 
+  static String deleteCartUrl(int productId) =>
+      '$_baseUrl/DeleteCartList/$productId';
+
   static const String getWishList = '$_baseUrl/ProductWishList';
+  static const String getCartList = '$_baseUrl/CartList';
 
   static const String readProfileUrl = '$_baseUrl/ReadProfile';
 
   static const String createProfileUrl = '$_baseUrl/CreateProfile';
+
   static const String createReviewUrl = '$_baseUrl/CreateProductReview';
 }

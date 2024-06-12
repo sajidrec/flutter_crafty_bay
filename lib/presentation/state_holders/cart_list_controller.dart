@@ -21,7 +21,7 @@ class CartListController extends GetxController {
     _inProgress = true;
     update();
     final NetworkResponse response = await NetworkCaller.getRequest(
-      url: Urls.getWishList,
+      url: Urls.getCartList,
     );
     if (response.isSuccess) {
       _cartList = CartListModel.fromJson(response.responseData).cartList ?? [];
@@ -54,12 +54,11 @@ class CartListController extends GetxController {
   }
 
   Future<bool> deleteCartItem(int cartId) async {
-    // TODO: call api to remove the cart item
     bool isSuccess = false;
     _inProgress = true;
     update();
     final NetworkResponse response = await NetworkCaller.getRequest(
-      url: Urls.getWishList, // TODO: Change url
+      url: Urls.deleteCartUrl(cartId),
     );
     if (response.isSuccess) {
       _deleteCartItem(cartId);
@@ -67,6 +66,9 @@ class CartListController extends GetxController {
     } else {
       _errorMessage = response.errorMessage;
     }
+
+    await getCartList();
+
     _inProgress = false;
     update();
     return isSuccess;

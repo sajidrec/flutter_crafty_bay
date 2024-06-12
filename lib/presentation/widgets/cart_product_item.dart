@@ -56,10 +56,20 @@ class _CartProductItemState extends State<CartProductItem> {
                 children: [_buildProductName(), _buildColorAndSize()],
               ),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.delete_outline_sharp),
-            )
+            GetBuilder<CartListController>(builder: (cartListController) {
+              return cartListController.inProgress
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : IconButton(
+                      onPressed: () async {
+                        await cartListController.deleteCartItem(
+                          widget.cartItem.productId,
+                        );
+                      },
+                      icon: const Icon(Icons.delete_outline_sharp),
+                    );
+            })
           ],
         ),
         Row(

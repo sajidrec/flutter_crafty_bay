@@ -26,9 +26,9 @@ assignment assigned in class time
 
 Complete the full project including-
 Assignment(*):
-1. Review list
-2. create review
-3. delete cart
+1. Review list -> (done)
+2. create review -> (done but unable to test for 500 response)
+3. delete cart -> (done)
 4. delete wishlist
 5. complete profile
 */

@@ -3,7 +3,7 @@ import 'package:crafty_bay/data/models/product.dart';
 class CartItemModel {
   int? id;
   int? userId;
-  int? productId;
+  int productId = 1;
   String? color;
   String? size;
   int? qty = 1;
@@ -14,15 +14,15 @@ class CartItemModel {
 
   CartItemModel(
       {this.id,
-        this.userId,
-        this.productId,
-        this.color,
-        this.size,
-        this.qty,
-        this.price,
-        this.createdAt,
-        this.updatedAt,
-        this.product});
+      this.userId,
+      required this.productId,
+      this.color,
+      this.size,
+      this.qty,
+      this.price,
+      this.createdAt,
+      this.updatedAt,
+      this.product});
 
   CartItemModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -35,6 +35,6 @@ class CartItemModel {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     product =
-    json['product'] != null ? Product.fromJson(json['product']) : null;
+        json['product'] != null ? Product.fromJson(json['product']) : null;
   }
 }

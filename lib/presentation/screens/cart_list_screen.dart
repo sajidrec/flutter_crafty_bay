@@ -49,7 +49,8 @@ class _CartListScreenState extends State<CartListScreen> {
                   itemCount: cartListController.cartList.length,
                   itemBuilder: (context, index) {
                     return CartProductItem(
-                        cartItem: cartListController.cartList[index]);
+                      cartItem: cartListController.cartList[index],
+                    );
                   },
                 ),
               ),
