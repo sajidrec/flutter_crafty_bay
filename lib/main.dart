@@ -30,5 +30,5 @@ Assignment(*):
 2. create review -> (done but unable to test for 500 response)
 3. delete cart -> (done)
 4. delete wishlist
-5. complete profile
+5. complete profile -> (done)
 */
