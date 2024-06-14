@@ -2,7 +2,7 @@ import 'package:crafty_bay/data/models/cart_model.dart';
 import 'package:crafty_bay/data/models/product_details_model.dart';
 import 'package:crafty_bay/presentation/screens/reviews_screen.dart';
 import 'package:crafty_bay/presentation/state_holders/add_to_cart_controller.dart';
-import 'package:crafty_bay/presentation/state_holders/add_to_wish_list_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/wish_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_details_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/widgets/centered_circular_progress_indicator.dart';
@@ -34,7 +34,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    Get.find<ProductDetailsController>().getProductDetails(widget.productId);
+    Get.find<ProductDetailsController>().getProductDetails(
+      widget.productId,
+    );
+    requestToCheckIfInWishList();
+  }
+
+  Future<void> requestToCheckIfInWishList() async {
+    await Get.find<WishListController>().checkIfInTheWishList(
+      productId: widget.productId,
+    );
   }
 
   @override
@@ -249,17 +258,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           },
           child: const Text('Reviews'),
         ),
-        GetBuilder<AddToWishListController>(
-          builder: (addToWishListController) {
-            if (addToWishListController.inProgress) {
+        GetBuilder<WishListController>(
+          builder: (wishListController) {
+            if (wishListController.inProgress) {
               return Transform.scale(
                   scale: 0.4, child: const CircularProgressIndicator());
             }
 
             return WishButton(
-              showAddToWishlist: true,
-              onTap: () {
-                addToWishListController.addToWishList(widget.productId);
+              showAddToWishlist: !wishListController.isInTheWishList,
+              onTap: () async {
+                if (wishListController.isInTheWishList) {
+                  await wishListController.removeFromWishList(widget.productId);
+                } else {
+                  await wishListController.addToWishList(widget.productId);
+                }
               },
             );
           },

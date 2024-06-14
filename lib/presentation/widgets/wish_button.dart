@@ -2,11 +2,12 @@ import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class WishButton extends StatelessWidget {
-  const WishButton(
-      {super.key,
-      this.showAddToWishlist = true,
-      this.isSelected = false,
-      required this.onTap});
+  const WishButton({
+    super.key,
+    required this.showAddToWishlist,
+    this.isSelected = false,
+    required this.onTap,
+  });
 
   final bool showAddToWishlist;
   final bool isSelected;
@@ -15,12 +16,16 @@ class WishButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Visibility(
-        visible: showAddToWishlist,
-        replacement: _getIconButton(Icons.delete_outline),
-        child: InkWell(
-          onTap: onTap,
-          child: _getIconButton(_getIconData()),
-        ));
+      visible: showAddToWishlist,
+      replacement: InkWell(
+        onTap: onTap,
+        child: _getIconButton(Icons.delete_outline),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: _getIconButton(_getIconData()),
+      ),
+    );
   }
 
   Widget _getIconButton(IconData icon) {

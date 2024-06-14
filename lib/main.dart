@@ -14,21 +14,17 @@ void main() {
 /* TODO:
 assignment assigned in class time
 1. (done) countdown timer in otp verification screen
-2. (complete profile screen done but couldn't test for api 500 response) read profile screen to complete profile screen(or home screen) navigation process:
+2. (done) read profile screen to complete profile screen(or home screen) navigation process:
    a. If success, then call another api named "readProfile". Create Read profile controller
    b. check if data is "null" or not,
    if null then move to the Complete profile screen, then move to home page. Create complete profile controller
    c. Otherwise back to the home page
 
-3. mentioned in the assignment task
-
-4. price update on item count
-
 Complete the full project including-
 Assignment(*):
 1. Review list -> (done)
-2. create review -> (done but unable to test for 500 response)
+2. create review -> (done)
 3. delete cart -> (done)
-4. delete wishlist
+4. delete wishlist -> (done)
 5. complete profile -> (done)
 */

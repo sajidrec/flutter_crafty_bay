@@ -37,4 +37,10 @@ class Urls {
   static const String createProfileUrl = '$_baseUrl/CreateProfile';
 
   static const String createReviewUrl = '$_baseUrl/CreateProductReview';
+
+  static const String getProductWishListUrl = '$_baseUrl/ProductWishList';
+
+  static String removeFromWishListUrl({required int productId}) {
+    return "$_baseUrl/RemoveWishList/$productId";
+  }
 }
