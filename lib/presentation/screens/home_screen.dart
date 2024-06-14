@@ -38,15 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               _buildSearchTextField(),
               const SizedBox(height: 16),
-              GetBuilder<HomeSliderController>(builder: (sliderController) {
-                if (sliderController.inProgress) {
-                  return const SizedBox(
-                      height: 200, child: CenteredCircularProgressIndicator());
-                }
-                return HomeCarouselSlider(
-                  sliderList: sliderController.sliderList,
-                );
-              }),
+              _buildHomeSlider(),
               const SizedBox(height: 16),
               SectionHeader(
                 title: 'All Category',
@@ -59,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (categoryListController) {
                 if (categoryListController.inProgress) {
                   return const SizedBox(
-                      height: 100, child: CenteredCircularProgressIndicator());
+                      height: 150, child: CenteredCircularProgressIndicator());
                 }
 
                 return _buildCategoryListView(
@@ -75,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (popularProductListController) {
                   if (popularProductListController.popularProductInProgress) {
                     return const SizedBox(
-                      height: 210,
+                      height: 250,
                       child: CenteredCircularProgressIndicator(),
                     );
                   }
@@ -94,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (specialProductListController) {
                   if (specialProductListController.inProgress) {
                     return const SizedBox(
-                      height: 210,
+                      height: 250,
                       child: CenteredCircularProgressIndicator(),
                     );
                   }
@@ -113,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (newProductListController) {
                   if (newProductListController.inProgress) {
                     return const SizedBox(
-                      height: 210,
+                      height: 250,
                       child: CenteredCircularProgressIndicator(),
                     );
                   }
@@ -129,19 +121,34 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  GetBuilder<HomeSliderController> _buildHomeSlider() {
+    return GetBuilder<HomeSliderController>(builder: (sliderController) {
+      if (sliderController.inProgress) {
+        return const SizedBox(
+          child: CenteredCircularProgressIndicator(),
+        );
+      }
+      return HomeCarouselSlider(
+        sliderList: sliderController.sliderList,
+      );
+    });
+  }
+
   Widget _buildCategoryListView(List<Category> categoryList) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: categoryList.map((e) => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CategoryItem(category: e),
-            const SizedBox(
-              width: 16,
-            )
-          ],
-        )).toList(),
+        children: categoryList
+            .map((e) => Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CategoryItem(category: e),
+                    const SizedBox(
+                      width: 16,
+                    )
+                  ],
+                ))
+            .toList(),
       ),
     );
   }
