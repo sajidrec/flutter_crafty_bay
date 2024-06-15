@@ -47,6 +47,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: ProductCard(
                   product: productListByCategoryController.productList[index],
+                  onTapFunc: () {},
                 ),
               ),
             );

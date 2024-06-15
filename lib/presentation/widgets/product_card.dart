@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:crafty_bay/data/models/product.dart';
 import 'package:crafty_bay/presentation/screens/product_details_screen.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
@@ -5,17 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard(
-      {super.key, this.showAddToWishlist = true, required this.product});
+  const ProductCard({
+    super.key,
+    this.showAddToWishlist = true,
+    required this.product,
+    required this.onTapFunc,
+  });
 
   final bool showAddToWishlist;
   final Product product;
+  final VoidCallback onTapFunc;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Get.to(() => ProductDetailsScreen(productId: product.id!));
+      onTap: () async {
+        await Get.to(() => ProductDetailsScreen(productId: product.id!));
+        onTapFunc();
       },
       child: Card(
         elevation: 3,
@@ -36,9 +44,7 @@ class ProductCard extends StatelessWidget {
                     )),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.network(
-                    product.image ?? ''
-                  ),
+                  child: Image.network(product.image ?? ''),
                 ),
               ),
               Padding(

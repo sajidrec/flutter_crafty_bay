@@ -88,12 +88,13 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             }),
             IconButton(
               color: AppColors.primaryColor,
-              onPressed: () {
-                Get.to(
+              onPressed: () async {
+                await Get.to(
                   () => CreateReviewScreen(
                     productId: widget.productId,
                   ),
                 );
+                requestReviewList(productId: widget.productId);
               },
               icon: const Icon(
                 Icons.add_circle,

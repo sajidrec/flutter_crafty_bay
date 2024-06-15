@@ -157,7 +157,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: productList.map((e) => ProductCard(product: e)).toList(),
+        children: productList
+            .map(
+              (e) => ProductCard(
+                product: e,
+                onTapFunc: () {},
+              ),
+            )
+            .toList(),
       ),
     );
   }

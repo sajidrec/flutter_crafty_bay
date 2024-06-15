@@ -53,11 +53,15 @@ class _WishListScreenState extends State<WishListScreen> {
               ),
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                   child: FittedBox(
                     child: ProductCard(
                       showAddToWishlist: false,
                       product: wishListController.wishList[index].product!,
+                      onTapFunc: () async {
+                        await Get.find<WishListController>().getWishList();
+                      },
                     ),
                   ),
                 );
