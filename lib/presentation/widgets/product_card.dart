@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:crafty_bay/data/models/product.dart';
 import 'package:crafty_bay/presentation/screens/product_details_screen.dart';

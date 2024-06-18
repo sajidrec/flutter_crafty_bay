@@ -1,3 +1,5 @@
+import 'package:crafty_bay/data/models/user_info_model.dart';
+import 'package:crafty_bay/presentation/state_holders/complete_profile_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/create_review_screen_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +19,24 @@ class CreateReviewScreen extends StatefulWidget {
 
 class _CreateReviewScreenState extends State<CreateReviewScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _firstNameTEController = TextEditingController();
-  final TextEditingController _lastNameTEController = TextEditingController();
+  final TextEditingController _nameTEController = TextEditingController();
+  final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _reviewTEController = TextEditingController();
+
+  UserInfoModel userInfoModel = UserInfoModel();
+
+  @override
+  void initState() {
+    super.initState();
+    requestUserData();
+  }
+
+  Future<void> requestUserData() async {
+    userInfoModel = await Get.find<CompleteProfileController>().getUserData();
+
+    _nameTEController.text = userInfoModel.cusName ?? "Not Specified";
+    _emailTEController.text = userInfoModel.user?.email ?? "Not Specified";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,17 +61,21 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
           children: [
             const SizedBox(height: 60),
             TextFormField(
-              controller: _firstNameTEController,
+              controller: _nameTEController,
               decoration: const InputDecoration(
-                hintText: "First Name",
+                hintText: "Name",
               ),
+              // readOnly: true,
+              enabled: false,
             ),
             const SizedBox(height: 16),
             TextFormField(
-              controller: _lastNameTEController,
+              controller: _emailTEController,
               decoration: const InputDecoration(
-                hintText: "Last Name",
+                hintText: "Email",
               ),
+              // readOnly: true,
+              enabled: false,
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -98,8 +119,8 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
   @override
   void dispose() {
     super.dispose();
-    _firstNameTEController.dispose();
-    _lastNameTEController.dispose();
+    _nameTEController.dispose();
+    _emailTEController.dispose();
     _reviewTEController.dispose();
   }
 }
