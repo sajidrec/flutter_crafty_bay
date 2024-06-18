@@ -89,26 +89,27 @@ class _CreateReviewScreenState extends State<CreateReviewScreen> {
             SizedBox(
               width: double.maxFinite,
               child: GetBuilder<CreateReviewScreenController>(
-                  builder: (createReviewScreenController) {
-                return (createReviewScreenController.inProgress)
-                    ? const Center(child: CircularProgressIndicator())
-                    : FilledButton(
-                        onPressed: () async {
-                          await createReviewScreenController.submitReview(
-                            reviewDescription:
-                                _reviewTEController.text.trim().toString(),
-                            productId: widget.productId,
-                          );
-                          Get.snackbar("", "Submitted");
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all(
-                            AppColors.primaryColor,
+                builder: (createReviewScreenController) {
+                  return (createReviewScreenController.inProgress)
+                      ? const Center(child: CircularProgressIndicator())
+                      : FilledButton(
+                          onPressed: () async {
+                            await createReviewScreenController.submitReview(
+                              reviewDescription:
+                                  _reviewTEController.text.trim().toString(),
+                              productId: widget.productId,
+                            );
+                            Get.snackbar("", "Submitted");
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                              AppColors.primaryColor,
+                            ),
                           ),
-                        ),
-                        child: const Text("Submit"),
-                      );
-              }),
+                          child: const Text("Submit"),
+                        );
+                },
+              ),
             )
           ],
         ),
