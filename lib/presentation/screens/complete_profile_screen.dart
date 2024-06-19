@@ -45,27 +45,6 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 const SizedBox(height: 24),
                 _buildCompleteProfileForm(),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    final customerDetails = CreateProfileModel(
-                      cusName:
-                          "${_firstNameTEController.text} ${_lastNameTEController.text}",
-                      cusPhone: _mobileTEController.text,
-                      cusCity: _cityTEController.text,
-                      shipAdd: _shippingAddressTEController.text,
-                    );
-
-                    try {
-                      await NetworkCaller.postRequest(
-                        url: Urls.createProfileUrl,
-                        body: customerDetails.toJson(),
-                      );
-                    } catch (e) {}
-
-                    Get.offAll(const MainBottomNavBarScreen());
-                  },
-                  child: const Text('Complete'),
-                ),
               ],
             ),
           ),
@@ -80,29 +59,86 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
       child: Column(
         children: [
           TextFormField(
+            validator: (value) {
+              if ((value?.length ?? 0) < 3) {
+                return "Must be at least 3 letters long";
+              }
+              return null;
+            },
             controller: _firstNameTEController,
             decoration: const InputDecoration(hintText: 'First name'),
           ),
           const SizedBox(height: 8),
           TextFormField(
+            validator: (value) {
+              if ((value?.length ?? 0) < 3) {
+                return "Must be at least 3 letters long";
+              }
+              return null;
+            },
             controller: _lastNameTEController,
             decoration: const InputDecoration(hintText: 'Last name'),
           ),
           const SizedBox(height: 8),
           TextFormField(
+            validator: (value) {
+              if ((value?.length ?? 0) != 11) {
+                return "Must be 11 digits";
+              }
+              return null;
+            },
             controller: _mobileTEController,
             decoration: const InputDecoration(hintText: 'Mobile'),
           ),
           const SizedBox(height: 8),
           TextFormField(
+            validator: (value) {
+              if ((value?.length ?? 0) < 2) {
+                return "Must be at least 2 letters long";
+              }
+              return null;
+            },
             controller: _cityTEController,
             decoration: const InputDecoration(hintText: 'City'),
           ),
           const SizedBox(height: 8),
           TextFormField(
+            validator: (value) {
+              if ((value?.length ?? 0) < 1) {
+                return "Can't be empty";
+              }
+              return null;
+            },
             controller: _shippingAddressTEController,
             maxLines: 3,
             decoration: const InputDecoration(hintText: 'Shipping address'),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                final customerDetails = CreateProfileModel(
+                  cusName:
+                      "${_firstNameTEController.text} ${_lastNameTEController.text}",
+                  cusPhone: _mobileTEController.text,
+                  cusCity: _cityTEController.text,
+                  shipAdd: _shippingAddressTEController.text,
+                );
+
+                try {
+                  await NetworkCaller.postRequest(
+                    url: Urls.createProfileUrl,
+                    body: customerDetails.toJson(),
+                  );
+                  Get.off(
+                    () => const MainBottomNavBarScreen(
+                      fromOtp: true,
+                    ),
+                  );
+                } catch (e) {}
+              }
+            },
+            child: const Text('Complete'),
           ),
         ],
       ),

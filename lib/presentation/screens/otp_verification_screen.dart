@@ -68,9 +68,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         if (result) {
                           if (await completeProfileController
                               .isProfileCompleted()) {
-                            Get.offAll(() => const MainBottomNavBarScreen());
+                            if (mounted) {
+                              Get.offAll(
+                                () => const MainBottomNavBarScreen(
+                                  fromOtp: true,
+                                ),
+                              );
+                            }
                           } else {
-                            Get.offAll(() => const CompleteProfileScreen());
+                            if (mounted) {
+                              Get.offAll(() => const CompleteProfileScreen());
+                            }
                           }
                         } else {
                           if (mounted) {
