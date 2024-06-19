@@ -14,6 +14,7 @@ import 'package:crafty_bay/presentation/state_holders/product_list_by_category_c
 import 'package:crafty_bay/presentation/state_holders/special_product_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/verify_email_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/verify_otp_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/wish_list_icon_controller.dart';
 import 'package:get/get.dart';
 
 import 'presentation/state_holders/reviews_screen_controller.dart';
@@ -41,5 +42,6 @@ class ControllerBinder extends Bindings {
     Get.put(CompleteProfileController());
     Get.put(ReviewsScreenController());
     Get.put(CreateReviewScreenController());
+    Get.put(WishListIconController());
   }
 }

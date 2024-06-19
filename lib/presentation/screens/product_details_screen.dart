@@ -4,6 +4,7 @@ import 'package:crafty_bay/presentation/screens/reviews_screen.dart';
 import 'package:crafty_bay/presentation/state_holders/add_to_cart_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/wish_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_details_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/wish_list_icon_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/widgets/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/widgets/product_image_carousel_slider.dart';
@@ -30,6 +31,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _counterValue = 1;
   String? _selectedColor;
   String? _selectedSize;
+  List<int> _favItemList = [];
+  bool showFavIcon = false;
 
   @override
   void initState() {
@@ -41,9 +44,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Future<void> requestToCheckIfInWishList() async {
-    await Get.find<WishListController>().checkIfInTheWishList(
-      productId: widget.productId,
-    );
+    _favItemList = await Get.find<WishListIconController>().requestWishList();
+    for (int i = 0; i < _favItemList.length; i++) {
+      if (_favItemList[i] == widget.productId) {
+        showFavIcon = true;
+        setState(() {});
+        break;
+      }
+    }
   }
 
   @override
@@ -258,25 +266,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           },
           child: const Text('Reviews'),
         ),
-        GetBuilder<WishListController>(
-          builder: (wishListController) {
-            if (wishListController.inProgress) {
-              return Transform.scale(
-                  scale: 0.4, child: const CircularProgressIndicator());
-            }
-
-            return WishButton(
-              showAddToWishlist: !wishListController.isInTheWishList,
-              onTap: () async {
-                if (wishListController.isInTheWishList) {
-                  await wishListController.removeFromWishList(widget.productId);
-                } else {
-                  await wishListController.addToWishList(widget.productId);
-                }
-              },
-            );
-          },
-        )
+        GetBuilder<WishListController>(builder: (wishListController) {
+          return GetBuilder<WishListIconController>(
+            builder: (wishListIconController) {
+              if (wishListIconController.inProgress) {
+                return Transform.scale(
+                    scale: 0.4, child: const CircularProgressIndicator());
+              }
+              return WishButton(
+                showAddToWishlist: !showFavIcon,
+                onTap: () async {
+                  if (showFavIcon) {
+                    showFavIcon = false;
+                    await wishListController
+                        .removeFromWishList(widget.productId);
+                    _favItemList.remove(widget.productId);
+                    setState(() {});
+                  } else {
+                    showFavIcon = true;
+                    await wishListController.addToWishList(widget.productId);
+                    _favItemList.add(widget.productId);
+                    setState(() {});
+                  }
+                },
+              );
+            },
+          );
+        })
       ],
     );
   }
