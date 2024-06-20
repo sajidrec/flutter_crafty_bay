@@ -20,7 +20,11 @@ class CompleteProfileController extends GetxController {
     NetworkResponse readProfile = await NetworkCaller.getRequest(
       url: Urls.readProfileUrl,
     );
-    if (readProfile.responseData["data"] != null) {
+    if ((readProfile.responseCode ?? 0) >= 400 &&
+        (readProfile.responseCode ?? 0) <= 499) {
+      return false;
+    }
+    if (await readProfile.responseData["data"] != null) {
       return true;
     }
     return false;

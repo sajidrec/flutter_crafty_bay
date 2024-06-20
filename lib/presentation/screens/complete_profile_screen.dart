@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
+  final bool nextScreenShouldNotLoad;
+
   const CompleteProfileScreen({
     super.key,
+    this.nextScreenShouldNotLoad = true,
   });
 
   @override
@@ -43,7 +46,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                 Text('Get started with us by providing your details',
                     style: textTheme.headlineSmall),
                 const SizedBox(height: 24),
-                _buildCompleteProfileForm(),
+                _buildCompleteProfileForm(
+                  nextScreenShouldLoad: widget.nextScreenShouldNotLoad,
+                ),
                 const SizedBox(height: 16),
               ],
             ),
@@ -53,7 +58,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     );
   }
 
-  Widget _buildCompleteProfileForm() {
+  Widget _buildCompleteProfileForm({
+    required bool nextScreenShouldLoad,
+  }) {
     return Form(
       key: _formKey,
       child: Column(
@@ -88,6 +95,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
               return null;
             },
             controller: _mobileTEController,
+            keyboardType: TextInputType.number,
             decoration: const InputDecoration(hintText: 'Mobile'),
           ),
           const SizedBox(height: 8),
@@ -131,8 +139,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                     body: customerDetails.toJson(),
                   );
                   Get.off(
-                    () => const MainBottomNavBarScreen(
-                      fromOtp: true,
+                    () => MainBottomNavBarScreen(
+                      fromOtp: nextScreenShouldLoad,
                     ),
                   );
                 } catch (e) {}
